@@ -11,7 +11,7 @@ public class SalesServer {
 
     public SalesServer(int port, int maxDays, int maxCached, String dataDir) {
         this.port = port;
-        this.userManager = new UserManager();
+        this.userManager = new UserManager(dataDir);
         this.salesStore = new SalesStore(maxDays, maxCached, dataDir);
     }
 

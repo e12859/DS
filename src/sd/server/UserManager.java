@@ -13,9 +13,18 @@ public class UserManager {
     private final Map<String, String> users;
     private final File storageFile;
 
-    public UserManager() {
+    private void logIOException(String where, IOException e) {
+        System.err.println(where + ": " + e.getMessage());
+        e.printStackTrace(System.err);
+    }
+
+    public UserManager(String dataDir) {
         this.users = new HashMap<>();
-        this.storageFile = new File("users.dat");
+        File dir = new File(dataDir);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        this.storageFile = new File(dir, "users.dat");
         loadUsers();
     }
 
@@ -31,6 +40,7 @@ public class UserManager {
                 users.put(username, password);
             }
         } catch (IOException e) {
+            logIOException("UserManager.loadUsers", e);
         }
     }
 
@@ -42,6 +52,7 @@ public class UserManager {
                 out.writeUTF(entry.getValue());
             }
         } catch (IOException e) {
+            logIOException("UserManager.saveUsers", e);
         }
     }
 

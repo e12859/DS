@@ -16,11 +16,15 @@ public class NonConsumingClient {
             Socket socket = new Socket(host, port);
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 
+            int reqId = 1;
+
+            out.writeInt(reqId++);
             out.writeByte(ProtocolConstants.MSG_REGISTER);
             out.writeUTF(username);
             out.writeUTF(password);
             out.flush();
 
+            out.writeInt(reqId++);
             out.writeByte(ProtocolConstants.MSG_LOGIN);
             out.writeUTF(username);
             out.writeUTF(password);
@@ -28,11 +32,13 @@ public class NonConsumingClient {
 
             int ops = 100000;
             for (int i = 0; i < ops; i++) {
+                out.writeInt(reqId++);
                 out.writeByte(ProtocolConstants.MSG_ADD_SALE);
                 out.writeUTF("prod" + (i % 10));
                 out.writeInt(1);
                 out.writeDouble(1.0);
                 out.flush();
+
                 if (i % 1000 == 0) {
                     System.out.println("Sent " + i + " requests");
                 }

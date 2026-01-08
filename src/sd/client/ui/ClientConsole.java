@@ -23,7 +23,7 @@ public class ClientConsole {
                 System.out.println("5 - Aggregate volume");
                 System.out.println("6 - Aggregate average price");
                 System.out.println("7 - Aggregate max price");
-                System.out.println("8 - Next day");
+                System.out.println("8 - New day");
                 System.out.println("9 - Filter events");
                 System.out.println("10 - Wait simultaneous products");
                 System.out.println("11 - Wait consecutive sales (any product)");
@@ -42,32 +42,22 @@ public class ClientConsole {
                     String username = reader.readLine();
                     System.out.print("New password: ");
                     String password = reader.readLine();
-                    boolean ok = false;
                     try {
-                        ok = client.register(username, password);
+                        boolean ok = client.register(username, password);
+                        System.out.println(ok ? "Registered" : "Register failed");
                     } catch (IOException e) {
-                        System.out.println("Error communicating with server");
-                    }
-                    if (ok) {
-                        System.out.println("Register success");
-                    } else {
-                        System.out.println("Register failed");
+                        System.out.println("Error registering");
                     }
                 } else if (line.equals("2")) {
                     System.out.print("Username: ");
                     String username = reader.readLine();
                     System.out.print("Password: ");
                     String password = reader.readLine();
-                    boolean ok = false;
                     try {
-                        ok = client.login(username, password);
+                        boolean ok = client.login(username, password);
+                        System.out.println(ok ? "Logged in" : "Login failed");
                     } catch (IOException e) {
-                        System.out.println("Error communicating with server");
-                    }
-                    if (ok) {
-                        System.out.println("Login success");
-                    } else {
-                        System.out.println("Login failed");
+                        System.out.println("Error logging in");
                     }
                 } else if (line.equals("3")) {
                     if (!client.isLoggedIn()) {
@@ -89,15 +79,10 @@ public class ClientConsole {
                         System.out.println("Invalid number");
                         continue;
                     }
-                    boolean ok = false;
                     try {
-                        ok = client.addSale(productId, quantity, price);
+                        boolean ok = client.addSale(productId, quantity, price);
+                        System.out.println(ok ? "Sale added" : "Add sale failed");
                     } catch (IOException e) {
-                        System.out.println("Error communicating with server");
-                    }
-                    if (ok) {
-                        System.out.println("Sale added");
-                    } else {
                         System.out.println("Error adding sale");
                     }
                 } else if (line.equals("4")) {
@@ -107,20 +92,20 @@ public class ClientConsole {
                     }
                     System.out.print("Product id: ");
                     String productId = reader.readLine();
-                    System.out.print("Last days: ");
+                    System.out.print("Days (d): ");
                     String dLine = reader.readLine();
-                    int lastDays;
+                    int days;
                     try {
-                        lastDays = Integer.parseInt(dLine.trim());
+                        days = Integer.parseInt(dLine.trim());
                     } catch (NumberFormatException e) {
                         System.out.println("Invalid number");
                         continue;
                     }
                     try {
-                        double result = client.aggregateQuantity(productId, lastDays);
+                        double result = client.aggregateQuantity(productId, days);
                         System.out.println("Quantity = " + result);
                     } catch (IOException e) {
-                        System.out.println("Error communicating with server");
+                        System.out.println("Error aggregating");
                     }
                 } else if (line.equals("5")) {
                     if (!client.isLoggedIn()) {
@@ -129,20 +114,20 @@ public class ClientConsole {
                     }
                     System.out.print("Product id: ");
                     String productId = reader.readLine();
-                    System.out.print("Last days: ");
+                    System.out.print("Days (d): ");
                     String dLine = reader.readLine();
-                    int lastDays;
+                    int days;
                     try {
-                        lastDays = Integer.parseInt(dLine.trim());
+                        days = Integer.parseInt(dLine.trim());
                     } catch (NumberFormatException e) {
                         System.out.println("Invalid number");
                         continue;
                     }
                     try {
-                        double result = client.aggregateVolume(productId, lastDays);
+                        double result = client.aggregateVolume(productId, days);
                         System.out.println("Volume = " + result);
                     } catch (IOException e) {
-                        System.out.println("Error communicating with server");
+                        System.out.println("Error aggregating");
                     }
                 } else if (line.equals("6")) {
                     if (!client.isLoggedIn()) {
@@ -151,20 +136,20 @@ public class ClientConsole {
                     }
                     System.out.print("Product id: ");
                     String productId = reader.readLine();
-                    System.out.print("Last days: ");
+                    System.out.print("Days (d): ");
                     String dLine = reader.readLine();
-                    int lastDays;
+                    int days;
                     try {
-                        lastDays = Integer.parseInt(dLine.trim());
+                        days = Integer.parseInt(dLine.trim());
                     } catch (NumberFormatException e) {
                         System.out.println("Invalid number");
                         continue;
                     }
                     try {
-                        double result = client.aggregateAveragePrice(productId, lastDays);
+                        double result = client.aggregateAveragePrice(productId, days);
                         System.out.println("Average price = " + result);
                     } catch (IOException e) {
-                        System.out.println("Error communicating with server");
+                        System.out.println("Error aggregating");
                     }
                 } else if (line.equals("7")) {
                     if (!client.isLoggedIn()) {
@@ -173,38 +158,38 @@ public class ClientConsole {
                     }
                     System.out.print("Product id: ");
                     String productId = reader.readLine();
-                    System.out.print("Last days: ");
+                    System.out.print("Days (d): ");
                     String dLine = reader.readLine();
-                    int lastDays;
+                    int days;
                     try {
-                        lastDays = Integer.parseInt(dLine.trim());
+                        days = Integer.parseInt(dLine.trim());
                     } catch (NumberFormatException e) {
                         System.out.println("Invalid number");
                         continue;
                     }
                     try {
-                        double result = client.aggregateMaxPrice(productId, lastDays);
+                        double result = client.aggregateMaxPrice(productId, days);
                         System.out.println("Max price = " + result);
                     } catch (IOException e) {
-                        System.out.println("Error communicating with server");
+                        System.out.println("Error aggregating");
                     }
                 } else if (line.equals("8")) {
+                    if (!client.isLoggedIn()) {
+                        System.out.println("You must login first");
+                        continue;
+                    }
                     try {
                         boolean ok = client.nextDay();
-                        if (ok) {
-                            System.out.println("Day advanced");
-                        } else {
-                            System.out.println("Error advancing day");
-                        }
+                        System.out.println(ok ? "Day advanced" : "New day failed");
                     } catch (IOException e) {
-                        System.out.println("Error communicating with server");
+                        System.out.println("Error advancing day");
                     }
                 } else if (line.equals("9")) {
                     if (!client.isLoggedIn()) {
                         System.out.println("You must login first");
                         continue;
                     }
-                    System.out.print("Day: ");
+                    System.out.print("Days ago: ");
                     String dLine = reader.readLine();
                     int day;
                     try {
@@ -250,61 +235,46 @@ public class ClientConsole {
                     String p1 = reader.readLine();
                     System.out.print("Product 2: ");
                     String p2 = reader.readLine();
-                    System.out.println("Waiting for simultaneous sales of " + p1 + " and " + p2 + " in current day...");
                     try {
-                        boolean result = client.waitSimultaneous(p1, p2);
-                        if (result) {
-                            System.out.println("Condition satisfied: both products sold in current day");
-                        } else {
-                            System.out.println("Day finished without both products being sold");
-                        }
+                        boolean ok = client.waitSimultaneous(p1, p2);
+                        System.out.println(ok ? "Condition met" : "Day ended");
                     } catch (IOException e) {
-                        System.out.println("Error communicating with server");
+                        System.out.println("Error waiting");
                     }
                 } else if (line.equals("11")) {
                     if (!client.isLoggedIn()) {
                         System.out.println("You must login first");
                         continue;
                     }
-                    System.out.print("Consecutive count: ");
+                    System.out.print("N consecutive sales: ");
                     String cLine = reader.readLine();
-                    int count;
+                    int c;
                     try {
-                        count = Integer.parseInt(cLine.trim());
+                        c = Integer.parseInt(cLine.trim());
                     } catch (NumberFormatException e) {
                         System.out.println("Invalid number");
                         continue;
                     }
-                    if (count <= 0) {
-                        System.out.println("Invalid count");
-                        continue;
-                    }
-                    System.out.println("Waiting for " + count + " consecutive sales of some product in current day...");
                     try {
-                        String product = client.waitConsecutive(count);
-                        if (product != null) {
-                            System.out.println("Condition satisfied: " + count + " consecutive sales of product " + product);
+                        String prod = client.waitConsecutive(c);
+                        if (prod != null) {
+                            System.out.println("Condition met for product: " + prod);
                         } else {
-                            System.out.println("Day finished without " + count + " consecutive sales of any product");
+                            System.out.println("Day ended");
                         }
                     } catch (IOException e) {
-                        System.out.println("Error communicating with server");
+                        System.out.println("Error waiting");
                     }
                 } else if (line.equals("12")) {
                     if (!client.isLoggedIn()) {
-                        System.out.println("You are not logged in");
+                        System.out.println("Not logged in");
                         continue;
                     }
-                    boolean ok = false;
                     try {
-                        ok = client.logout();
+                        boolean ok = client.logout();
+                        System.out.println(ok ? "Logged out" : "Logout failed");
                     } catch (IOException e) {
-                        System.out.println("Error communicating with server");
-                    }
-                    if (ok) {
-                        System.out.println("Logout success");
-                    } else {
-                        System.out.println("Logout failed");
+                        System.out.println("Error logging out");
                     }
                 } else {
                     System.out.println("Unknown option");
@@ -312,7 +282,7 @@ public class ClientConsole {
             }
             client.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Error connecting to server");
         }
     }
 }
